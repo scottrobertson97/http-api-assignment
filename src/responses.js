@@ -4,11 +4,15 @@ const respond = (request, response, type, status, content) => {
   response.end();
 };
 
+//success response with default message
 const success = (request, response, acceptedTypes, params, message = 'This is a successful response.') => {
+  //build xml
   if (acceptedTypes[0] === 'text/xml') {
     let responseXML = '<response>';
+    //just add message
     responseXML = `${responseXML} <message>${message}</message>`;
     responseXML = `${responseXML} </response>`;
+    //responf with 200 code
     return respond(request, response, 'text/xml', 200, responseXML);
   }
   // message to send
@@ -19,12 +23,17 @@ const success = (request, response, acceptedTypes, params, message = 'This is a 
   return respond(request, response, 'application/json', 200, JSON.stringify(responseJSON));
 };
 
+//error response
 const error = (request, response, acceptedTypes, params, message, id, statusCode) => {
+  //construct xml reponse
   if (acceptedTypes[0] === 'text/xml') {
     let responseXML = '<response>';
+    //add the message
     responseXML = `${responseXML} <message>${message}</message>`;
+    //add the id
     responseXML = `${responseXML} <id>${id}</id>`;
     responseXML = `${responseXML} </response>`;
+    //return xml error
     return respond(request, response, 'text/xml', statusCode, responseXML);
   }
 
@@ -34,11 +43,13 @@ const error = (request, response, acceptedTypes, params, message, id, statusCode
     id,
   };
 
-  // return our json with a 404 not found error code
+  // return our json with a error code
   return respond(request, response, 'application/json', statusCode, JSON.stringify(responseJSON));
 };
 
+// function to show bad request error
 const badRequest = (request, response, acceptedTypes, params) => {
+  //check perameter
   if (!params.valid || params.valid !== 'true') {
     return error(request, response, acceptedTypes, params,
       'Missing valid query parameter set to true.',
@@ -49,7 +60,9 @@ const badRequest = (request, response, acceptedTypes, params) => {
     'This request has the required parameters.');
 };
 
+// function to show unauthorized error
 const unauthorized = (request, response, acceptedTypes, params) => {
+  //check perameter
   if (params.loggedIn !== 'yes') {
     return error(request, response, acceptedTypes, params,
       'Missing loggedIn query parameter set to yes.',
@@ -60,6 +73,7 @@ const unauthorized = (request, response, acceptedTypes, params) => {
     'This request has the required parameters.');
 };
 
+// function to show forbidden error
 const forbidden = (request, response, acceptedTypes, params) => {
   error(request, response, acceptedTypes, params,
     'You do not have access to this content.',
@@ -67,6 +81,7 @@ const forbidden = (request, response, acceptedTypes, params) => {
     403);
 };
 
+// function to show internal error
 const internal = (request, response, acceptedTypes, params) => {
   error(request, response, acceptedTypes, params,
     'Internal Server Error. Something went wrong.',
@@ -74,6 +89,7 @@ const internal = (request, response, acceptedTypes, params) => {
     500);
 };
 
+// function to show not implemented error
 const notImplemented = (request, response, acceptedTypes, params) => {
   error(request, response, acceptedTypes, params,
     'A get request for this page has not been implemented yet. Check again later for updated content.',

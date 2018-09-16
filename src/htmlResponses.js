@@ -5,6 +5,7 @@ const fs = require('fs'); // pull in the file system module
 // We are using this for simplicity. Ideally we won't have
 // synchronous operations or load entire files into memory.
 const index = fs.readFileSync(`${__dirname}/../client/client.html`);
+//load style.css
 const css = fs.readFileSync(`${__dirname}/../client/style.css`);
 
 // function to handle the index page
@@ -17,6 +18,7 @@ const getIndex = (request, response) => {
   response.end();
 };
 
+//handle style.css
 const getCss = (request, response) => {
   // set status code (200 success) and content type
   response.writeHead(200, { 'Content-Type': 'text/css' });
@@ -26,12 +28,8 @@ const getCss = (request, response) => {
   response.end();
 };
 
+//does nothing right now
 const getFavicon = (request, response) => {
-  // set status code (200 success) and content type
-  // response.writeHead(200, { 'Content-Type': 'text/css' });
-  // write an HTML string or buffer to the response
-  // response.write(css);
-  // send the response to the client.
   response.end();
 };
 
