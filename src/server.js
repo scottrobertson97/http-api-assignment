@@ -38,7 +38,7 @@ const onRequest = (request, response) => {
   // grab the 'accept' headers (comma delimited) and split them into an array
   const acceptedTypes = request.headers.accept.split(',');
 
-  console.log(`Getting: ${parsedUrl.pathname}`);
+  //console.log(`Getting: ${parsedUrl.pathname}`);
 
   // check if the path name (the /name part of the url) matches
   // any in our url object. If so call that function. If not, default to notFound.
@@ -52,4 +52,4 @@ const onRequest = (request, response) => {
 // start HTTP server
 http.createServer(onRequest).listen(port);
 
-console.log(`Listening on 127.0.0.1: ${port}`);
+//console.log(`Listening on 127.0.0.1: ${port}`);
