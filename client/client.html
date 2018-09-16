@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
   <title>Our simple HTTP server</title>
-  <link rel="stylesheet" type="text/css" href="/style.css">
-  
+  <link rel="stylesheet" type="text/css" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
 
@@ -14,34 +13,42 @@
       //Again, the server can ignore our requested types.
       const type = xhr.getResponseHeader('content-type');
 	  
-	  //grab the content section
+	    //grab the content section
       const content = document.querySelector("#content");
+      content.innerHTML = '';
+
+      //get selection text
+      const select = document.querySelector("#page");
+      const selectText = select.options[select.selectedIndex].text;
       
-	  //create h1 and p to hold our response data for the page
+	    //create h1 and p to hold our response data for the page
       const h1 = document.createElement('h1');
       const p = document.createElement('p');
+
+      h1.textContent = selectText;
       
-	  //if the response was in json
+	    //if the response was in json
       if(type === 'application/json') {
-		//parse the response text into a JSON object
+		    //parse the response text into a JSON object
         const obj = JSON.parse(xhr.response);
-		//add the json fields to our html elements
-        h1.textContent = `Name: ${obj.name}`;
-        p.textContent = `Age: ${obj.age}`; 
+		    //add the json fields to our html elements        
+        p.textContent = `Message: ${obj.message}`; 
+
+        console.dir(obj);
       } //if response was in xml
       else if (type === 'text/xml') {
-		//grab the name tag and age tag from our responseXML
-		//This will only work if the responding XML is completely valid.
-		//Otherwise the responseXML field will be null
-        const name = xhr.responseXML.querySelector('name').textContent;
-        const age = xhr.responseXML.querySelector('age').textContent;
+		    //grab the name tag and age tag from our responseXML
+		    //This will only work if the responding XML is completely valid.
+		    //Otherwise the responseXML field will be null
+        const message = xhr.responseXML.querySelector('message').textContent;
+
+        console.dirxml(xhr.responseXML);
 		
-		//add the xml fields to our html elements
-        h1.textContent = `Name: ${name}`;
-        p.textContent = `Age: ${age}`; 
+		  //add the xml fields to our html elements
+        p.textContent = `Message: ${message}`; 
       }
       
-	  //append the h1 and p to the content.
+	    //append the h1 and p to the content.
       content.appendChild(h1);
       content.appendChild(p);
     };
@@ -72,8 +79,8 @@
       //const jsonButton = document.querySelector("#getCatsJSON");
       //const xmlButton = document.querySelector("#getCatsXML");
       
-      const page = '/success';
-      const type = 'application/json';
+      let page = '/success';
+      let type = 'application/json';
       const send = () => sendAjax(page, type);
       const pageChange = (e) => page = e.target.value;
       const typeChange = (e) => type = e.target.value;
